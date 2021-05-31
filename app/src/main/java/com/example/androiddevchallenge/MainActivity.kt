@@ -16,16 +16,28 @@
 package com.example.androiddevchallenge
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private val viewModel: CountdownViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,28 +46,50 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
 
-// Start building your app here!
-@Composable
-fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+
+    // Start building your app here!
+    @Composable
+    fun MyApp() {
+
+        Scaffold(
+            Modifier.fillMaxSize(),
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column() {
+                    CountdownText(viewModel.seconds.collectAsState())
+                    Button(
+                        onClick = { viewModel.startCountdown() }) {
+                        Text(text = "Click!")
+                    }
+                }
+
+            }
+        }
     }
-}
 
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
+    @Composable
+    private fun CountdownText(seconds: State<Int>) {
+        Log.i("ddmeng", "countdown: ${seconds.value}")
+        Text(text = seconds.value.toString())
     }
-}
 
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+    @Preview("Light Theme", widthDp = 360, heightDp = 640)
+    @Composable
+    fun LightPreview() {
+        MyTheme {
+            MyApp()
+        }
+    }
+
+    @Preview("Dark Theme", widthDp = 360, heightDp = 640)
+    @Composable
+    fun DarkPreview() {
+        MyTheme(darkTheme = true) {
+            MyApp()
+        }
     }
 }
