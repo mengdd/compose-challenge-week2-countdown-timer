@@ -27,14 +27,15 @@ import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: CountdownViewModel by viewModels()
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     // Start building your app here!
     @Composable
     fun MyApp() {
-
+        val screenState = viewModel.state.collectAsState()
         Scaffold(
             Modifier.fillMaxSize(),
         ) {
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 contentAlignment = Alignment.Center
             ) {
                 Column() {
-                    CountdownText(viewModel.seconds.collectAsState())
+                    CountdownText(screenState.value.seconds)
                     Button(
                         onClick = { viewModel.startCountdown() }) {
                         Text(text = "Click!")
@@ -72,9 +73,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun CountdownText(seconds: State<Int>) {
-        Log.i("ddmeng", "countdown: ${seconds.value}")
-        Text(text = seconds.value.toString())
+    private fun CountdownText(seconds: Int) {
+        Log.i("ddmeng", "countdown: ${seconds}")
+        Text(text = seconds.toString())
     }
 
     @Preview("Light Theme", widthDp = 360, heightDp = 640)
