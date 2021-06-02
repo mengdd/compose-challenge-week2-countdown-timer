@@ -1,5 +1,6 @@
 package com.example.androiddevchallenge
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,10 @@ data class ScreenState(val seconds: Int = 0)
 class CountdownViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
+
+    init {
+        Log.i("ddmeng", "init ViewModel")
+    }
 
     val state: StateFlow<ScreenState> =
         repository.getTime().mapLatest { number ->
