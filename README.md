@@ -1,5 +1,8 @@
 # Template repository
 
+![screenshot_1](./results/screenshot_1.png)
+![screenshot_2](./results/screenshot_2.png)
+
 Template repository for the Jetpack Compose [#AndroidDevChallenge](https://developer.android.com/dev-challenge).
 
 ## Getting started

@@ -8,12 +8,17 @@ import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject constructor() {
-    var count = 60
-    fun getTime(): Flow<Int> {
+    private var started = false
+    fun getTime(startTime: Int): Flow<Int> {
+        var count = startTime
+        started = true
         return flow {
-            while (true) {
-                emit(count--)
+            while (started) {
                 delay(1000)
+                emit(count--)
+                if (count < 0) {
+                    started = false
+                }
             }
         }
     }
